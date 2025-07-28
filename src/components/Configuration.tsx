@@ -4,6 +4,7 @@
 import React from "react";
 // NOVO: Importado o hook para detecção de scroll
 import { useInView } from "react-intersection-observer";
+import Image from "next/image"; // Importe o componente Image
 
 const icons = [
   { src: "/images/icon1.png", alt: "Icon 1", hoverClass: "hover-blue" },
@@ -31,10 +32,8 @@ const Configuration = () => {
   const { ref: gridRef, inView: gridIsVisible } = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    // REMOVIDO: 'overflow-hidden' para garantir a visibilidade em todas as telas
     <section className="flex flex-col justify-center items-center bg-black py-20 lg:py-24 text-white gap-8">
       
-      {/* ALTERADO: Adicionada ref e classes de animação */}
       <h1
         ref={titleRef}
         className={`text-3xl md:text-5xl text-center font-bold px-4 transition-all duration-700 ease-out ${
@@ -44,7 +43,6 @@ const Configuration = () => {
         Configuração simples e rápida
       </h1>
       
-      {/* ALTERADO: Adicionada ref e classes de animação com delay */}
       <p
         ref={paragraphRef}
         className={`text-gray-400 text-base leading-relaxed text-center max-w-md mx-auto px-4 mb-8 transition-all duration-700 ease-out delay-200 ${
@@ -54,7 +52,6 @@ const Configuration = () => {
         O nosso processo plug-and-play garante uma implementação rápida e extremamente simples.
       </p>
 
-      {/* ALTERADO: Adicionada ref e classes de animação ao container da grade */}
       <div
         ref={gridRef}
         className={`flex flex-wrap justify-center items-center gap-4 max-w-5xl px-4 transition-all duration-700 ease-out delay-300 ${
@@ -62,10 +59,12 @@ const Configuration = () => {
         }`}
       >
         {icons.map((icon, index) => (
-          <img
+          <Image
             key={index}
             src={icon.src}
             alt={icon.alt}
+            width={80}
+            height={80}
             className={`icon-item hover-effect ${icon.hoverClass} w-16 h-16 sm:w-20 sm:h-20`}
           />
         ))}

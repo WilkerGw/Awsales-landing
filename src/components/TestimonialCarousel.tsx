@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image'; // Importe o componente Image
 
 // ... (interface e dados dos testimonials permanecem os mesmos)
 interface Testimonial {
@@ -48,9 +49,6 @@ const TestimonialCarousel: React.FC = () => {
       </h2>
       <div className="relative w-full overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
         
-        {/* PISTA DE ANIMAÇÃO COM A CORREÇÃO:
-          - Adicionada a classe 'w-max' para forçar o container a ter a largura máxima de seu conteúdo.
-        */}
         <div className="flex w-max animate-slide">
           {duplicatedTestimonials.map((testimonial, index) => (
             <div
@@ -58,12 +56,14 @@ const TestimonialCarousel: React.FC = () => {
               className="flex flex-col justify-between flex-shrink-0 w-80 sm:w-96 h-auto bg-[#191D24] rounded-lg shadow-lg p-6 mx-4 border border-gray-800"
             >
               <p className="text-gray-300 text-base leading-relaxed mb-6 italic whitespace-normal">
-                "{testimonial.quote}"
+                {`"${testimonial.quote}"`}
               </p>
               <div className="flex items-center mt-auto border-t border-gray-700/50 pt-4">
-                <img
+                <Image
                   src={testimonial.avatar}
                   alt={testimonial.author}
+                  width={56}
+                  height={56}
                   className="w-14 h-14 rounded-full mr-4 object-cover"
                 />
                 <div>

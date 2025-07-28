@@ -7,7 +7,7 @@ type FeatureIcon = React.ReactNode;
 
 export interface Feature {
   id: string;
-  icon: FeatureIcon; // Agora usa o tipo definido para o ícone
+  icon: FeatureIcon;
   mainImage: string;
   title: string;
   subtitle: string;
