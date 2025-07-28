@@ -1,10 +1,18 @@
-// components/FlywheelDiagram.tsx
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { IconType } from 'react-icons';
-import { FaShoppingCart } from 'react-icons/fa'; // Ícone padrão central
-
-// Importe os SVGs de fundo
-import { BgSvg01, BgSvg02, BgSvg03, BgSvg04, BgSvg05 } from "./flywheel/FlywheelBackgrounds";
+// NOVO: Ícones corrigidos e importados corretamente
+import { 
+  FaLightbulb, 
+  FaLink, 
+  FaHandshake, 
+  FaChartBar, 
+  FaSearch, 
+  FaShoppingCart 
+} from 'react-icons/fa';
+// NOVO: Removida a importação duplicada
+import { BgSvg01, BgSvg02, BgSvg03, BgSvg04, BgSvg05 } from './flywheel-bg';
 
 // Interface para os dados de cada passo do flywheel
 interface FlywheelStep {
@@ -12,7 +20,8 @@ interface FlywheelStep {
   text: string;
   iconComponent: IconType;
   centralIconComponent: IconType;
-  bgComponent: React.ComponentType; // Tipo para componentes SVG
+  // NOVO: Corrigido o tipo para ser mais genérico para componentes React
+  bgComponent: React.ComponentType<any>;
   altText: string;
   svgWidth: number;
   svgHeight: number;
@@ -24,6 +33,7 @@ interface FlywheelDiagramProps {
   activeStepId: string | null; // ID do passo ativo vindo do componente pai
 }
 
+// NOVO: Dados atualizados com os ícones corretos
 const flywheelStepsData: FlywheelStep[] = [
   {
     number: "01", text: "Entende", iconComponent: FaLightbulb, centralIconComponent: FaLightbulb, bgComponent: BgSvg01, altText: "Passo 01 Entende",
@@ -47,9 +57,10 @@ const flywheelStepsData: FlywheelStep[] = [
   },
 ];
 
+
 const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
   const [hoveredStepIndex, setHoveredStepIndex] = useState<number | null>(null);
-  const [CurrentCentralIconComponent, setCurrentCentralIconComponent] = useState<IconType>(FaShoppingCart);
+  const [CurrentCentralIconComponent, setCurrentCentralIconComponent] = useState<IconType>(() => FaShoppingCart);
 
   const stepRadius = 180;
   const mainCircleSize = 450;
@@ -58,7 +69,7 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
   // Efeito para atualizar o ícone central e o estado de hover quando o activeStepId externo muda
   useEffect(() => {
     if (activeStepId === null) {
-      setCurrentCentralIconComponent(FaShoppingCart);
+      setCurrentCentralIconComponent(() => FaShoppingCart);
       setHoveredStepIndex(null);
     } else {
       const activeIndex = flywheelStepsData.findIndex(step => step.altText.replace(/ /g, '-').toLowerCase() === activeStepId);
@@ -66,12 +77,14 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
         setCurrentCentralIconComponent(() => flywheelStepsData[activeIndex].centralIconComponent);
         setHoveredStepIndex(activeIndex);
       } else {
-        setCurrentCentralIconComponent(FaShoppingCart);
+        setCurrentCentralIconComponent(() => FaShoppingCart);
         setHoveredStepIndex(null);
       }
     }
   }, [activeStepId]);
 
+  // NOVO: Key para forçar a remontagem do ícone central e reiniciar a animação
+  const centralIconKey = CurrentCentralIconComponent.name + (hoveredStepIndex ?? 'default');
 
   return (
     <div className="flex items-center justify-center relative mt-12 lg:mt-0">
@@ -79,8 +92,8 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
       <div className="relative w-[450px] h-[450px] bg-[#181E26] rounded-full flex items-center justify-center border border-[#2A313A] shadow-lg">
         {/* Ícone central que muda no hover */}
         <CurrentCentralIconComponent
+          key={centralIconKey}
           className="text-white text-8xl opacity-50 transition-opacity duration-300 ease-in-out"
-          key={CurrentCentralIconComponent.name}
         />
 
         {/* Pontos no Anel Externo (cinza esmaecido) */}
@@ -122,9 +135,7 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
           return (
             <div
               key={index}
-              className={`absolute flex flex-col items-center justify-center
-                         w-[100px] h-[100px] text-center
-                         group cursor-pointer transition-all duration-300 ease-in-out z-10`}
+              className={`absolute flex flex-col items-center justify-center w-[100px] h-[100px] text-center group cursor-pointer transition-all duration-300 ease-in-out z-10`}
               style={{
                 left: `${mainCircleCenterOffset + x}px`,
                 top: `${mainCircleCenterOffset + y}px`,
@@ -135,9 +146,6 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
                 setHoveredStepIndex(index);
               }}
               onMouseLeave={() => {
-                // Ao sair do hover, verificamos se há um item ativo do menu lateral
-                // Se sim, o ícone central e o estado de hover devem voltar para o item do menu.
-                // Se não, volta para o ícone de carrinho padrão.
                 if (activeStepId) {
                   const activeIndex = flywheelStepsData.findIndex(s => s.altText.replace(/ /g, '-').toLowerCase() === activeStepId);
                   setCurrentCentralIconComponent(() => activeIndex !== -1 ? flywheelStepsData[activeIndex].centralIconComponent : FaShoppingCart);
@@ -148,10 +156,9 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
                 }
               }}
             >
-              {/* SVG de fundo com posicionamento **relativo ao círculo principal** */}
+              {/* SVG de fundo */}
               <div
-                className={`absolute w-[450px] h-[450px] pointer-events-none transition-opacity duration-300 ease-in-out
-                            ${isActiveStep ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
+                className={`absolute w-[450px] h-[450px] pointer-events-none transition-opacity duration-300 ease-in-out ${isActiveStep ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
                 style={{
                   left: `${svgCalculatedLeft + (step.svgOffsetX || 0)}px`,
                   top: `${svgCalculatedTop + (step.svgOffsetY || 0)}px`,
@@ -162,12 +169,10 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
 
               {/* Círculo Azul com Ícone do Passo */}
               <div
-                className={`p-3 rounded-full inline-flex items-center justify-center
-                            relative z-20 transition-all duration-300 ease-in-out
-                            ${isActiveStep ? 'bg-[#1065e3] shadow-blue-glow scale-110' : 'bg-[#0A296A]'}`}
+                className={`p-3 rounded-full inline-flex items-center justify-center relative z-20 transition-all duration-300 ease-in-out ${isActiveStep ? 'bg-[#1065e3] shadow-blue-glow scale-110' : 'bg-[#0A296A]'}`}
                 style={{
-                   width: isActiveStep ? '50px' : '40px',
-                   height: isActiveStep ? '50px' : '40px',
+                  width: isActiveStep ? '50px' : '40px',
+                  height: isActiveStep ? '50px' : '40px',
                 }}
               >
                   <IconComponent
@@ -175,27 +180,10 @@ const FlywheelDiagram: React.FC<FlywheelDiagramProps> = ({ activeStepId }) => {
                   />
               </div>
 
-              {/* Texto "01 Entende" (aparece quando não hover, e some no hover) */}
-              <div className={`flex flex-col items-center mt-2 whitespace-nowrap
-                                 transition-opacity duration-300 ease-in-out
-                                 ${isActiveStep ? 'opacity-0' : 'opacity-100'}`}>
+              {/* Texto "01 Entende" (some no hover) */}
+              <div className={`flex flex-col items-center mt-2 whitespace-nowrap transition-opacity duration-300 ease-in-out ${isActiveStep ? 'opacity-0' : 'opacity-100'}`}>
                 <p className="text-sm font-medium text-[#828E9D]">{step.number}</p>
                 <p className="text-base font-semibold text-[#F2F9FE]">{step.text}</p>
-              </div>
-
-              {/* Texto "Passo XX Nome do Passo" (aparece no hover, movido para a lateral) */}
-              <div
-                className={`absolute text-sm font-medium
-                                 transition-all duration-300 ease-in-out
-                                 ${isActiveStep ? 'opacity-100 text-white' : 'opacity-0'}`}
-                style={{
-                  left: `calc(50% + ${x > 0 ? '60px' : '-60px'})`,
-                  top: '50%',
-                  transform: `translate(${x > 0 ? '0%' : '-100%'}, -50%)`,
-                  textAlign: x > 0 ? 'left' : 'right'
-                }}
-              >
-                {step.altText}
               </div>
             </div>
           );
