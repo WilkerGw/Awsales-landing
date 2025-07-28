@@ -1,42 +1,252 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import "tailwindcss";
+
+
+body{
+  overflow-x: hidden; 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
+
+.animate-slide {
+  animation: slide 60s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .animate-slide {
+    animation: slide 35s linear infinite;
+  }
+}
+
+@keyframes aurora-text-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 200%;
+  }
+}
+
+.aurora-text {
+  background: linear-gradient(
+    to right,
+    #8e2de2,
+    #4a00e0,
+    #00c6ff,
+    #0072ff,
+    #00c6ff,
+    #4a00e0,
+    #8e2de2
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  animation: aurora-text-animation 15s ease infinite;
+}
+
+.icon-item {
+  @apply p-2 w-20 h-20 rounded-sm cursor-pointer;
+  background: linear-gradient(to bottom, #2e2e2e, #5e5e5e);
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.hover-blue:hover {
+  background: linear-gradient(to bottom, #007bff, #0056b3);
+}
+
+.hover-green:hover {
+  background: linear-gradient(to bottom, #28a745, #1e7e34);
+}
+
+.hover-red:hover {
+  background: linear-gradient(to bottom, #dc3545, #bd2130);
+}
+
+.hover-purple:hover {
+  background: linear-gradient(to bottom, #6f42c1, #563d7c);
+}
+
+.hover-orange:hover {
+  background: linear-gradient(to bottom, #fd7e14, #cc6102);
+}
+
+.hover-yellow:hover {
+  background: linear-gradient(to bottom, #ffc107, #d39e00);
+}
+
+.hover-pink:hover {
+  background: linear-gradient(to bottom, #e83e8c, #ad2c64);
+}
+
+.hover-teal:hover {
+  background: linear-gradient(to bottom, #20c997, #179c7b);
+}
+
+.hover-indigo:hover {
+  background: linear-gradient(to bottom, #6610f2, #4708b3);
+}
+
+.hover-lime:hover {
+  background: linear-gradient(to bottom, #76ff03, #5ea500);
+}
+
+.hover-cyan:hover {
+  background: linear-gradient(to bottom, #17a2b8, #117a8b);
+}
+
+.hover-brown:hover {
+  background: linear-gradient(to bottom, #a0522d, #803e1e);
+}
+
+.hover-deep-purple:hover {
+  background: linear-gradient(to bottom, #673ab7, #4b2c82);
+}
+
+.hover-amber:hover {
+  background: linear-gradient(to bottom, #ffc107, #ffa000);
+}
+
+.hover-light-blue:hover {
+  background: linear-gradient(to bottom, #03a9f4, #0288d1);
+}
+
+.hover-emerald:hover {
+  background: linear-gradient(to bottom, #32cd32, #228b22);
+}
+
+.meta-gradient-box {
+  background: linear-gradient(to bottom right,
+    rgb(0, 162, 255) 0%,
+    rgb(155, 235, 255) 20%,
+    rgb(255, 255, 255) 100%,
+    rgb(255, 255, 255) 100%
+  );
+  z-index: 10;
+  position: relative;
+}
+
+.aurora-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-background::after {
+  content: '';
+  position: absolute;
+  right: -20%;
+  bottom: -30%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 70% 80%,
+    rgb(213, 244, 255) 0%,
+    rgb(230, 248, 255) 20%,
+    rgb(255, 255, 255) 40%,
+    transparent 70%
+  ),
+  linear-gradient(to top left,
+    rgb(0, 157, 255) 0%,
+    transparent 50%
+  );
+  filter: blur(100px);
+  transform: rotate(15deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .aurora-background::after {
+    right: -50%;
+    bottom: -50%;
+    width: 150%;
+    height: 150%;
+    filter: blur(70px);
+  }
+}
+
+
+/* --- INÍCIO DAS NOVAS REGRAS PARA O CÍRCULO ANIMADO --- */
+
+/* A animação agora inclui a centralização para não ser sobrescrita */
+@keyframes rotateCircle {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Estilos do círculo reescritos do zero para a nova abordagem */
+.animated-half-circle {
+  /* 1. Posicionamento central universal */
+  position: absolute;
+  left: 50%;
+  top: 150%;
+  
+  /* 2. Estilos visuais */
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #00BFFF;
+  border-right-color: #00BFFF;
+  opacity: 0.15;
+  z-index: 0;
+
+  /* 3. Animação com velocidade base (para mobile) */
+  animation: rotateCircle 35s linear infinite;
+
+  /* 4. Tamanho base (para mobile) */
+  width: 150vw;
+  height: 150vw;
+}
+
+/* Estilo para TABLETS (telas a partir de 768px) */
+@media (min-width: 768px) {
+  .animated-half-circle {
+    width: 120vw;
+    height: 120vw;
+    border-width: 4px;
+    animation-duration: 45s; /* Mais lento no tablet */
+  }
+}
+
+/* Estilo para DESKTOP (telas a partir de 1024px) */
+@media (min-width: 1024px) {
+  .animated-half-circle {
+    width: 80vw;
+    height: 80vw;
+    max-width: 1200px; /* Limite em telas muito grandes */
+    max-height: 1200px;
+    animation-duration: 60s; /* Mais lento no desktop */
+  }
+}
+/* --- FIM DAS NOVAS REGRAS PARA O CÍRCULO ANIMADO --- */
