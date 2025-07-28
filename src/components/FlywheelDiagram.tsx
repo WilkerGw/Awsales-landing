@@ -20,8 +20,8 @@ interface FlywheelStep {
   text: string;
   iconComponent: IconType;
   centralIconComponent: IconType;
-  // NOVO: Corrigido o tipo para ser mais genérico para componentes React
-  bgComponent: React.ComponentType<any>;
+  // NOVO: Tipo específico para componentes SVG, evitando o 'any'
+  bgComponent: React.ComponentType<React.SVGProps<SVGSVGElement>>; 
   altText: string;
   svgWidth: number;
   svgHeight: number;
