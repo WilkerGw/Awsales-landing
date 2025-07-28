@@ -12,7 +12,7 @@ import {
   FaShoppingCart 
 } from 'react-icons/fa';
 // NOVO: Removida a importação duplicada
-import { BgSvg01, BgSvg02, BgSvg03, BgSvg04, BgSvg05 } from './flywheel-bg';
+import { BgSvg01, BgSvg02, BgSvg03, BgSvg04, BgSvg05 } from './flywheel/FlywheelBackgrounds';
 
 // Interface para os dados de cada passo do flywheel
 interface FlywheelStep {
